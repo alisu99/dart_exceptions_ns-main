@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:dart_exceptions/services/account_service.dart';
+import 'package:http/http.dart';
 
 import '../models/account.dart';
 
@@ -59,8 +60,14 @@ class AccountScreen {
     try {
       List<Account> listAccounts = await _accountService.getAll();
       print(listAccounts);
-    } on Exception {
+    } on ClientException catch (ClientException) {
+      print('Não cosegui me conectar com o servidor!');
+      print(ClientException.message);
+      print(ClientException.uri);
+    } on Exception  {
       print('Não cosegui me conectar com o banco. Tente novamente mais tarde!');
+    } finally {
+      print("${DateTime.now()} | Tentativa de conexão.");
     }
   }
 
